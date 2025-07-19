@@ -42,7 +42,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           source: public/build/*
-          target: /var/www/RentIt/New/RentItKenya/
+          target: /var/www/RentIt/New/NewRentItKenya/
 
       - name: Deploy App via SSH
         uses: appleboy/ssh-action@v1.0.0
@@ -51,7 +51,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /var/www/RentIt/New/RentItKenya
+            cd /var/www/RentIt/New/NewRentItKenya
             git checkout -f
             git pull origin main
             composer install --no-interaction --prefer-dist --ignore-platform-reqs
