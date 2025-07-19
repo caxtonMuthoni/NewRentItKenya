@@ -176,7 +176,7 @@
 
             <!-- Footer -->
             <div class="bg-gray-50 px-8 py-4 text-center text-gray-500 text-sm">
-                © {{ new Date().getFullYear() }} PropertyPro. All rights
+                © {{ new Date().getFullYear() }} RentItKenya. All rights
                 reserved.
             </div>
         </div>
