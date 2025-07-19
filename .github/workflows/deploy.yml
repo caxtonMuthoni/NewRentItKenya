@@ -17,7 +17,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.1"
+          php-version: "8.3" # Updated to latest stable PHP version
           extensions: mbstring, bcmath, curl, fileinfo, openssl, tokenizer, xml
           tools: composer
 
@@ -27,7 +27,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "20" # Latest LTS version
 
       - name: Install NPM Dependencies
         run: npm ci
@@ -36,7 +36,7 @@ jobs:
         run: npm run build
 
       - name: Upload Public Build Files
-        uses: appleboy/scp-action@v0.1.4
+        uses: appleboy/scp-action@v0.1.7 # Latest version of appleboy/scp-action
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
@@ -45,7 +45,7 @@ jobs:
           target: /var/www/RentIt/New/NewRentItKenya/
 
       - name: Deploy App via SSH
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@v1.0.3 # Latest version of appleboy/ssh-action
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
