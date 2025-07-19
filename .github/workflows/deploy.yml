@@ -1,0 +1,60 @@
+name: RentVerifyKenya
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          extensions: mbstring, bcmath, curl, fileinfo, openssl, tokenizer, xml
+          tools: composer
+
+      - name: Install PHP Dependencies
+        run: composer install --no-progress --no-interaction --prefer-dist --ignore-platform-reqs
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install NPM Dependencies
+        run: npm ci
+
+      - name: Build Assets
+        run: npm run build
+
+      - name: Upload Public Build Files
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          source: public/build/*
+          target: /var/www/RentIt/New/RentItKenya/
+
+      - name: Deploy App via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /var/www/RentIt/New/RentItKenya
+            git checkout -f
+            git pull origin main
+            composer install --no-interaction --prefer-dist --ignore-platform-reqs
+            php artisan migrate --force
+            php artisan config:cache
+            php artisan route:cache
